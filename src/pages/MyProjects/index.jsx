@@ -188,7 +188,7 @@ const MyProjectsPage = () => {
                         key={project.id}
                         className="common-pointer bg-cover bg-no-repeat flex flex-1 flex-col h-[252px] items-center justify-end p-7 sm:px-5 w-full"
                         style={{ backgroundImage: "url('images/img_group6.svg')" }}
-                        onClick={() => navigate(`/projectdetails/${project.id}`)}
+                        onClick={() => navigate(`/details/`)}
                       >
                        <div className="flex flex-col items-center justify-start mt-2.5 w-[71%] md:w-full">
                           <div className="flex flex-col items-center justify-end p-[31px] sm:px-5 rounded-[15px] w-full">

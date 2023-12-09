@@ -16,7 +16,7 @@ const MyProjects = React.lazy(() => import("pages/MyProjects"));
 const MyProfile = React.lazy(() => import("pages/MyProfile"));
 const Startingpage = React.lazy(() => import("pages/Startingpage"));
 const UpdateProject = React.lazy(()=> import ("./pages/MyProjects/update.jsx"))
-const ProjectDetails = React.lazy(()=> import ("./pages/ProjectVisualization/details.jsx"))
+const ProjectDetails = React.lazy(()=> import ("./pages/ProjectVisualization/stats.jsx"))
 const Kanban = React.lazy(() => import("./pages/ProjectVisualization/kanban.jsx"))
 const Calendar = React.lazy(() => import("./pages/ProjectVisualization/calendar.jsx"))
 
@@ -32,16 +32,14 @@ const ProjectRoutes = () => {
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signuprole" element={<Signuprole />} />
-          <Route path="/kanbanview" element={<Kanbanview />} />
           <Route path="/newtask" element={<NewTask />} />
           <Route path="/apps" element={<Apps />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/mytasks" element={<MyTasks />} />
           <Route path="/graphs" element={<Graphs />} />
-          <Route path="/calendarview" element={<CalendarView />} />
           <Route path="/newproject" element={<NewProject />} />
           <Route path="/updateproject/:projectId" element={<UpdateProject />} />
-          <Route path="/projectdetails/:projectId" element={<ProjectDetails />} />
+          <Route path="/details/" element={<ProjectDetails />} />
           <Route path="/kanban" element={<Kanban />} />
           <Route path="/calendar" element={<Calendar />} />
           
