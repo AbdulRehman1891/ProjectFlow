@@ -254,7 +254,7 @@ const NewTaskPage = () => {
         }}
       >
         <p>
-          {popUp.type === "success" ? "Project Created Successfully!" : "Project Creation Failed. Please try again."}
+          {popUp.type === "success" ? "Task Created Successfully!" : "Task Creation Failed. Please try again."}
         </p>
       </animated.div>
 
