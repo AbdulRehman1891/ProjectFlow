@@ -96,24 +96,14 @@ const KanbanComponent = ({
 
   return (
     <div>
-      <ProjectProgress
-        handleCategoryChange={handleCategoryChange}
-        handleNavigate={handleNavigate}
-        handleDeletionProject={handleDeletionProject}
-        loading={loading}
-        successPopupAnimation={successPopupAnimation}
-        statisticsData={statisticsData}
-        pieChartSize={pieChartSize}
-        hovered={hovered}
-        pieChartData={pieChartData}
-      />
+      <ProjectProgress/>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '50px', marginTop: '20px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '250px', marginTop: '-300px' }}>
         {/* KanbanComponent content */}
         <DragDropContext onDragEnd={onDragEnd}>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop: '20px' }}>
             {Object.keys(tasks).map((columnId) => (
-              <div key={columnId} style={{ margin: '16px', backgroundColor: '#E2E8F0', borderRadius: '8px', padding: '16px' }}>
+              <div key={columnId} style={{ margin: '16px', backgroundColor: '#E2E8F0', borderRadius: '8px', padding: '16px', width: '300px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
                   <h3>{columnId.toUpperCase()}</h3>
                   <div>
@@ -178,7 +168,7 @@ const KanbanComponent = ({
               onChange={(e) => setNewCategory(e.target.value)}
             />
             <Button color="indigo_800_01" shape="round" onClick={handleAddCategory} style={{ color: '#ffffff', marginRight: '8px' }}>
-              Add Category
+              Add
             </Button>
             <Button shape="round" onClick={() => setShowAddCategoryPopup(false)} style={{ backgroundColor: '#BE3144', color: '#ffffff' }}>
               Cancel

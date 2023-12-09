@@ -12,20 +12,20 @@ const TaskTable = ({ tasks }) => {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <h3 style={{ color: '#323F73', marginBottom: '10px' }}>Task List</h3>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: 'poppins', marginTop: '80px' }}>
+        <h3 style={{ color: '#323F73', marginBottom: '10px', fontFamily: 'poppins' }}>Task List</h3>
         {/* '+' Button for Creating Tasks */}
         <Button
           variant="contained"
-          color="primary"
+          color="#primary"
           size="small"
           onClick={() => navigate(`/newtask`)}
-          style={{ backgroundColor: '#323F73', marginLeft: '10px', borderRadius: '8px', width: '30px', height: '30px' }}
+          style={{ backgroundColor: '#323F73', marginLeft: '10px', borderRadius: '8px', width: '30px', height: '30px', color: "#ffffff" ,marginBottom: '20px' }}
         >
           +
         </Button>
       </div>
-      <TableContainer component={Paper} style={{ marginBottom: '10px', background: '#f5f5f5' }}>
+      <TableContainer component={Paper} style={{ marginBottom: '10px', background: '#f5f5f5', fontFamily: 'poppins' }}>
         <Table style={{ minWidth: 650, background: '#f5f5f5' }}>
           <TableHead>
             <TableRow>
@@ -71,9 +71,9 @@ const ProjectStats = ({
 
   return (
     <div>
-      <ProjectProgress/>
-      <div style={{ marginLeft: '350px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <ProjectProgress />
+      <div style={{ marginLeft: '350px', marginTop: '-180px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '-20px' }}>
           <div style={{ width: '40%' }}>
             {/* Line chart for project statistics */}
             <ResponsiveContainer width="100%" height={200}>

@@ -60,19 +60,19 @@ const CalendarComponent = ({
         tasks={tasks}
       />
       <div>
-        <div style={{ marginTop: '20px', marginLeft: '350px' }}>
-          <h3>Calendar View</h3>
+        <div style={{ marginTop: '-250px', marginLeft: '350px', padding: '20px', backgroundColor: '#f5f5f5', borderRadius: '8px' }}>
+          <h3 style={{ color: '#323F73' }}>Calendar View</h3>
           <Calendar
             localizer={localizer}
             events={events}
             startAccessor="start"
             endAccessor="end"
-            style={{ height: 500 }}
+            style={{ height: 500, marginTop: '20px' }}
             onSelectEvent={handleEventClick}
             eventPropGetter={(event, start, end, isSelected) => {
               const backgroundColor = isSelected ? '#4299E1' : '#2C5282';
               const borderColor = isSelected ? '#4299E1' : '#2C5282';
-              return { style: { backgroundColor, borderColor } };
+              return { style: { backgroundColor, borderColor, color: 'white' } };
             }}
           />
         </div>
