@@ -1,14 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NotFound from "pages/NotFound";
-const NewProject = React.lazy(() => import("pages/NewProject"));
-const CalendarView = React.lazy(() => import("pages/CalendarView"));
+const NewProject = React.lazy(() => import("pages/NewProject/index.jsx"));
 const Graphs = React.lazy(() => import("pages/Graphs"));
 const MyTasks = React.lazy(() => import("pages/MyTasks"));
 const Dashboard = React.lazy(() => import("pages/Dashboard"));
 const Apps = React.lazy(() => import("pages/Apps"));
 const NewTask = React.lazy(() => import("pages/NewTask"));
-const Kanbanview = React.lazy(() => import("pages/Kanbanview"));
 const Signuprole = React.lazy(() => import("pages/Signuprole"));
 const Signup = React.lazy(() => import("pages/Signup"));
 const Signin = React.lazy(() => import("pages/Signin"));
@@ -19,6 +17,7 @@ const UpdateProject = React.lazy(()=> import ("./pages/MyProjects/update.jsx"))
 const ProjectDetails = React.lazy(()=> import ("./pages/ProjectVisualization/stats.jsx"))
 const Kanban = React.lazy(() => import("./pages/ProjectVisualization/kanban.jsx"))
 const Calendar = React.lazy(() => import("./pages/ProjectVisualization/calendar.jsx"))
+const Invite = React.lazy(() => import("pages/NewProject/inviteMembers.jsx"))
 
 const ProjectRoutes = () => {
   return (
@@ -42,6 +41,7 @@ const ProjectRoutes = () => {
           <Route path="/details/" element={<ProjectDetails />} />
           <Route path="/kanban" element={<Kanban />} />
           <Route path="/calendar" element={<Calendar />} />
+          <Route path="/invite" element={<Invite />} />
           
 
         </Routes>

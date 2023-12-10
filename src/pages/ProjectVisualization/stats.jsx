@@ -154,7 +154,7 @@ const ProjectVisualization = () => {
         { name: 'Task 2', dueDate: '2023-02-01', assignee: 'User 2' },
         // ... more tasks
       ],
-      pieChartData: [{ value: 60, color: '#860A35' }, { value: 40, color: '#e0e0e0' }],
+      pieChartData: [{ value: 60, color: '#860A35' }, { value: 30, color: '#e0e0e0' }, { value: 10, color: '#323F73' }],
     };
     setProjectDetails(placeholderProjectDetails);
   }, []);

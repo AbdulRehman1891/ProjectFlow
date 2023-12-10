@@ -110,7 +110,7 @@ const ProjectProgress = ({ progress, statisticsData, tasks }) => {
          {/* Headings for Statistics, Kanban, and Calendar with increased gap */}
         <div style={{ display: 'flex', alignItems: 'center', marginTop: '20px', cursor: 'pointer', fontFamily: 'poppins' }}>
           <h3 onClick={navigateToStatistics} style={{ margin: '0 20px', borderBottom: '1px solid #323F73' }}>Statistics</h3>
-          <h3 onClick={navigateToKanban} style={{ margin: '0 30%', borderBottom: '1px solid #323F73' }}>Kanban</h3>
+          <h3 onClick={navigateToKanban} style={{ margin: '0 30%', borderBottom: '1px solid #323F73', cursor: 'pointer' }}>Kanban</h3>
           <h3  onClick={navigateToCalendar} style={{ margin: '0 30px', borderBottom: '1px solid #323F73' }}>Calendar</h3>
         </div>
       

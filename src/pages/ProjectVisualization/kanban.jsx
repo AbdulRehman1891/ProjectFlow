@@ -5,15 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import ProjectProgress from './details';
 
 const KanbanComponent = ({
-  handleCategoryChange,
-  handleNavigate,
-  handleDeletionProject,
-  loading,
-  successPopupAnimation,
-  statisticsData,
-  pieChartSize,
-  hovered,
-  pieChartData,
 }) => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState({

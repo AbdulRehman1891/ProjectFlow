@@ -1,21 +1,21 @@
-import React, { useState , useEffect} from "react";
-import { Button, Text } from "components";
-import { Sidebar } from "react-pro-sidebar";
-import { useNavigate } from "react-router-dom";
-import { MyDatePicker } from "components";
+import React, { useState, useEffect } from 'react';
+import { Button, Text } from 'components';
+import { useNavigate } from 'react-router-dom';
+import { MyDatePicker } from 'components'; // Make sure this is the correct import path
+import Navigation from 'pages/Sidebar'; // Make sure this is the correct import path
 import { useSpring, animated } from 'react-spring';
 
 const NewProjectPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    projectName: "",
+    projectName: '',
     startDate: null,
     dueDate: null,
-    description: "",
+    description: '',
   });
 
   const [popUp, setPopUp] = useState({
-    type: null, // "success" or "error"
+    type: null, // 'success' or 'error'
   });
 
   const handleDueDateChange = (date) => {
@@ -34,7 +34,7 @@ const NewProjectPage = () => {
   const handleCreateProject = () => {
     if (!formData.projectName || !formData.description || !formData.dueDate) {
       console.error('Please fill out all required fields.');
-      setPopUp({ type: "error" });
+      setPopUp({ type: 'error' });
       return;
     }
 
@@ -44,89 +44,53 @@ const NewProjectPage = () => {
       description: formData.description,
     };
 
-    let token = localStorage.getItem("token");
+    let token = localStorage.getItem('token');
 
-    fetch("http://127.0.0.1:3000/api/v1/projects", {
-      method: "POST",
+    fetch('http://127.0.0.1:3000/api/v1/projects', {
+      method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(projectData),
     })
       .then((response) => response.json())
       .then((data) => {
-        setPopUp({ type: "success" });
-        navigate("/myprojects");
+        setPopUp({ type: 'success' });
+        navigate('/myprojects');
       })
       .catch((error) => {
-        setPopUp({ type: "error" });
-        console.error("Project creation failed", error);
+        setPopUp({ type: 'error' });
+        console.error('Project creation failed', error);
       });
   };
 
-    const popUpAnimation = useSpring({
-      opacity: popUp.type ? 1 : 0,
-      pointerEvents: popUp.type ? "auto" : "none",
-    });
+  const popUpAnimation = useSpring({
+    opacity: popUp.type ? 1 : 0,
+    pointerEvents: popUp.type ? 'auto' : 'none',
+  });
 
-    useEffect(() => {
-      // Set a timer to clear the pop-up after 3000 milliseconds (3 seconds)
-      const timer = setTimeout(() => {
-        setPopUp({ type: null });
-      }, 3000);
-  
-      // Clear the timer when the component unmounts or when popUp.type changes
-      return () => clearTimeout(timer);
-    }, [popUp.type]);
-  
+  useEffect(() => {
+    // Set a timer to clear the pop-up after 3000 milliseconds (3 seconds)
+    const timer = setTimeout(() => {
+      setPopUp({ type: null });
+    }, 3000);
+
+    // Clear the timer when the component unmounts or when popUp.type changes
+    return () => clearTimeout(timer);
+  }, [popUp.type]);
 
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
         {/* Sidebar */}
-        <div style={{ width: '23%', position: 'relative', backgroundColor: '#EDEFF5' }}>
-          <Sidebar
-            style={{
-              width: '100%',
-              height: '100%',
-              background: 'linear-gradient(180deg, #EDEFF5 0%, white 100%)',
-              cursor: 'pointer',
-            }}
-          >
-            <div className="absolute flex flex-col inset-x-[0] justify-start mx-auto top-[6%] w-[45%]">
-              <animated.div>
-                <Text className="font-bold text-[22px] text-center text-indigo-800 sm:text-lg md:text-xl">
-                  ProjectFlow
-                </Text>
-              </animated.div>
-              <animated.div >
-                <Text onClick={() => navigate('/dashboard')} className="ml-7 md:ml-[0] mt-[102px] text-base text-indigo-800 tracking-[0.44px]">
-                  Dashboard
-                </Text>
-              </animated.div>
-              <animated.div>
-                <div className="flex flex-col gap-[46px] items-start justify-start md:ml-[0] ml-[35px] mt-[47px]">
-                  <Text onClick={() => navigate('/myprojects')} className="md:ml-[0] ml-[3px] text-base text-indigo-800 tracking-[0.44px]">
-                    Projects
-                  </Text>
-                  <Text onClick={() => navigate('/mytasks')} className="text-base text-indigo-800 tracking-[0.44px]">
-                    My Tasks
-                  </Text>
-                  <Text onClick={() => navigate('/apps')} className="md:ml-[0] ml-[7px] text-base text-indigo-800 tracking-[0.44px]">
-                    Apps
-                  </Text>
-                </div>
-              </animated.div>
-            </div>
-          </Sidebar>
-        </div>
+        <Navigation />
         {/* New Project Form */}
         <div className="flex flex-col justify-start md:mt-0 mt-[68px] w-[73%] md:w-full">
           <Text
             className="md:ml-[0] ml-[849px] text-base text-indigo-800 tracking-[0.44px]"
             size="txtPoppinsRegular16"
-            onClick={() => navigate("/myprofile")}
+            onClick={() => navigate('/myprofile')}
           >
             My Profile
           </Text>
@@ -143,11 +107,7 @@ const NewProjectPage = () => {
                 <Text className="text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                   Project Start Date
                 </Text>
-                <MyDatePicker
-                  selectedDate={formData.startDate}
-                  handleDateChange={handleStartDateChange}
-                  
-                />
+                <MyDatePicker selectedDate={formData.startDate} handleDateChange={handleStartDateChange} />
               </div>
 
               {/* Project Name */}
@@ -162,21 +122,16 @@ const NewProjectPage = () => {
                     value={formData.projectName}
                     onChange={handleInputChange}
                     className="text-base w-full bg-gray-50 border-none border-b-2 border-indigo-800 focus:outline-none"
-                    
                   />
                 </div>
               </div>
 
               {/* Project Creation Date */}
-              
               <div className="flex md:flex-col flex-row gap-[22px] items-start justify-between w-[97%] md:w-full mt-[34px]">
                 <Text className="text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                   Due Date
                 </Text>
-                <MyDatePicker
-                  selectedDate={formData.dueDate}
-                  handleDateChange={handleDueDateChange}
-                />
+                <MyDatePicker selectedDate={formData.dueDate} handleDateChange={handleDueDateChange} />
               </div>
 
               {/*Description*/}
@@ -190,26 +145,36 @@ const NewProjectPage = () => {
                     value={formData.description}
                     onChange={handleInputChange}
                     className="text-base w-full bg-gray-50 border-none border-b-2 border-indigo-800 focus:outline-none"
-                  
                   />
                 </div>
               </div>
+               {/* Button to Invite Team Member */}
+              {/* Button to Invite */}
+                <Button
+                  className="cursor-pointer leading-[normal] min-w-[84px] ml-[635px] mt-[63px] text-base text-center tracking-[0.44px]"
+                  shape="round"
+                  style = {{backgroundColor: "#860A35", color: "#ffffff"}}
+                  onClick={() => navigate('/invite')}
+                  
+                >
+                  Invite
+                </Button>
 
-              {/* Button to Create Project */}
-              <Button
-                className="cursor-pointer leading-[normal] min-w-[84px] md:ml-[0] ml-[745px] mt-[63px] text-base text-center tracking-[0.44px]"
-                shape="round"
-                color="indigo_800"
-                onClick={handleCreateProject}
-              >
-                Create
-              </Button>
+                {/* Button to Create Project */}
+                <Button
+                  className="cursor-pointer leading-[normal] min-w-[84px] ml-[745px] mt-[-42px] text-base text-center tracking-[0.44px]"
+                  shape="round"
+                  color="indigo_800"
+                  onClick={handleCreateProject}
+                >
+                  Create
+                </Button>
+
             </div>
           </div>
         </div>
       </div>
 
-      
       <animated.div
         style={{
           ...popUpAnimation,
@@ -217,13 +182,13 @@ const NewProjectPage = () => {
           top: '50%',
           left: '50%',
           transform: popUpAnimation.opacity.interpolate((opacity) => `translate(-50%, -50%) scale(${opacity})`),
-          background: popUp.type === "success" ? 'rgba(0, 255, 0, 0.5)' : 'rgba(255, 0, 0, 0.5)',
+          background: popUp.type === 'success' ? 'rgba(0, 255, 0, 0.5)' : 'rgba(255, 0, 0, 0.5)',
           padding: '20px',
           borderRadius: '10px',
         }}
       >
         <p>
-          {popUp.type === "success" ? "Project Created Successfully!" : "Project Creation Failed. Please try again."}
+          {popUp.type === 'success' ? 'Project Created Successfully!' : 'Project Creation Failed. Please try again.'}
         </p>
       </animated.div>
     </>
