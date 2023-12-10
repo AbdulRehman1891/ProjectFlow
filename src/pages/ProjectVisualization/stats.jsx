@@ -13,17 +13,30 @@ const TaskTable = ({ tasks }) => {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontFamily: 'poppins', marginTop: '80px' }}>
-        <h3 style={{ color: '#323F73', marginBottom: '10px', fontFamily: 'poppins' }}>Task List</h3>
-        {/* '+' Button for Creating Tasks */}
-        <Button
-          variant="contained"
-          color="#primary"
-          size="small"
-          onClick={() => navigate(`/newtask`)}
-          style={{ backgroundColor: '#323F73', marginLeft: '10px', borderRadius: '8px', width: '30px', height: '30px', color: "#ffffff" ,marginBottom: '20px' }}
-        >
-          +
-        </Button>
+        <h2 style={{ color: '#323F73', marginBottom: '10px', fontFamily: 'poppins', fontSize: "30px" }}>Task List</h2>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+    {/* Button to Invite */}
+    <Button
+      className="cursor-pointer leading-[normal] min-w-[84px] text-base text-center tracking-[0.44px]"
+      shape="round"
+      style={{ backgroundColor: "#860A35", color: "#ffffff", marginBottom: '20px' }}
+      onClick={() => navigate('/invite')}
+    >
+      Invite
+    </Button>
+
+    {/* '+' Button for Creating Tasks */}
+    <Button
+      variant="contained"
+      color="#primary"
+      size="large"
+      onClick={() => navigate(`/newtask`)}
+      style={{ backgroundColor: '#323F73', borderRadius: '8px', width: '50px', height: '50px', color: "#ffffff", marginBottom: '20px' }}
+    >
+      +
+    </Button>
+  </div>
       </div>
       <TableContainer component={Paper} style={{ marginBottom: '10px', background: '#f5f5f5', fontFamily: 'poppins' }}>
         <Table style={{ minWidth: 650, background: '#f5f5f5' }}>
@@ -50,14 +63,9 @@ const TaskTable = ({ tasks }) => {
 };
 
 const ProjectStats = ({
-  handleCategoryChange,
-  handleNavigate,
-  handleDeletionProject,
-  loading,
-  successPopupAnimation,
+
   statisticsData,
   pieChartSize,
-  hovered,
   pieChartData,
   tasks,
 }) => {

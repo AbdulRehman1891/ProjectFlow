@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NotFound from "pages/NotFound";
 const NewProject = React.lazy(() => import("pages/NewProject/index.jsx"));
-const Graphs = React.lazy(() => import("pages/Graphs"));
 const MyTasks = React.lazy(() => import("pages/MyTasks"));
 const Dashboard = React.lazy(() => import("pages/Dashboard"));
 const Apps = React.lazy(() => import("pages/Apps"));
@@ -35,7 +34,6 @@ const ProjectRoutes = () => {
           <Route path="/apps" element={<Apps />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/mytasks" element={<MyTasks />} />
-          <Route path="/graphs" element={<Graphs />} />
           <Route path="/newproject" element={<NewProject />} />
           <Route path="/updateproject/:projectId" element={<UpdateProject />} />
           <Route path="/details/" element={<ProjectDetails />} />
