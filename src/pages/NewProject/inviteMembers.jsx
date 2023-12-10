@@ -9,10 +9,7 @@ const InviteMembers = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    projectName: '',
-    startDate: null,
-    dueDate: null,
-    description: '',
+  
     emailAddresses: [''], // Initial email field
   });
 
@@ -22,13 +19,7 @@ const InviteMembers = () => {
 
   const [showInviteModal, setShowInviteModal] = useState(false);
 
-  const handleDueDateChange = (date) => {
-    setFormData({ ...formData, dueDate: date });
-  };
 
-  const handleStartDateChange = (date) => {
-    setFormData({ ...formData, startDate: date });
-  };
 
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -89,22 +80,27 @@ const InviteMembers = () => {
   };
 
   const renderEmailFields = () => {
-    return formData.emailAddresses.map((email, index) => (
-      <div key={index} className="flex md:flex-col flex-row md:gap-10 items-start justify-between mt-[34px] w-[97%] md:w-full">
-        <Text className="md:mt-0 mt-0.5 text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
-          Email Address
-        </Text>
-        <div className="border-b bg-gray-50 border-indigo-800 text-base w-[76%]">
-          <input
-            type="text"
-            name={`emailAddress-${index}`}
-            value={formData.emailAddresses[index]}
-            onChange={(e) => handleInputChange(e, index)}
-            className="text-base w-full bg-gray-50 border-none border-b-2 border-indigo-800 focus:outline-none"
-          />
-        </div>
+    return (
+      <div className="flex flex-col items-end justify-between mt-[34px] w-[97%] md:w-full">
+        {formData.emailAddresses.map((email, index) => (
+          <div key={index} className="flex flex-col ml-4 mt-4">
+            {/* Email Label */}
+            <Text style={{ fontSize: "16px", fontFamily: "Poppins", color: "#323F73" }}>
+              Email Address
+            </Text>
+            <div style={{ borderBottom: '1px solid #323F73', backgroundColor: '#F8FAFC', fontSize: '1rem', width: '76%' }}>
+              <input
+                type="text"
+                name={`emailAddress-${index}`}
+                value={email}
+                onChange={(e) => handleInputChange(e, index)}
+                className="text-base w-full bg-gray-50 border-none border-b-2 border-indigo-800 focus:outline-none"
+              />
+            </div>
+          </div>
+        ))}
       </div>
-    ))
+    );
   };
   
 
@@ -137,31 +133,55 @@ const InviteMembers = () => {
           >
             My Profile
           </Text>
+          {/* '+' Button to Add Email Field */}
+      
+
           <Text
             className="ml-[50px] sm:text-3xl md:text-[3px] text-[34px] text-left text-indigo-800 flex items-center"
             size="txtPoppinsBold34"
           >
             Invite Members
           </Text>
+          
+
           <div className="ml-[45px] bg-gray-50 flex flex-col items-center justify-end mt-8 p-[39px] sm:px-5 rounded-[30px] w-full">
             <div className="flex flex-col items-start justify-start mt-[19px] w-[95%] md:w-full">
-              <div className="flex md:flex-col flex-row md:gap-10 items-start justify-between mt-[34px] w-[97%] md:w-full">
-                {/* Image on the left side */}
-                <img src="images/team.png" alt="Email Icon" style={{ width: '40%', marginRight: '8px' }} />
-                {/* Email Input Fields */}
-                {renderEmailFields()}
-                
-              </div>
-
-              {/* '+' Button to Add Email Field */}
-              <Button
-                className="cursor-pointer leading-[normal] min-w-[28px] ml-[760px] mt-[20px] text-base text-center tracking-[0.44px]"
-                style={{ color: "#323F73", fontSize: '30px' }}
+               {/* '+' Button to Add Email Field */}
+               <Button
+                style={{
+                  cursor: "pointer",
+                  minWidth: "40px",
+                  marginLeft: "760px",
+                  fontSize: "30px",
+                  color: "#323F73",
+                  width: "40px",
+                  height: "40px",
+                  textAlign: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "50%",
+                  border: "1px solid #323F73",
+                  transition: "background-color 0.3s, color 0.3s",
+                }}
                 onClick={handleAddEmailField}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = "#323F73";
+                  e.currentTarget.style.color = "#F8FAFC";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = "";
+                  e.currentTarget.style.color = "#323F73";
+                }}
               >
                 +
               </Button>
-
+             <div className="flex md:flex-col flex-row md:gap-10 items-start justify-between mt-[34px] w-[97%] md:w-full">             
+                {/* Image on the left side */}
+                <img src="images/team.png" alt="Email Icon" style={{ width: '50%', marginRight: '8px' }} />
+                {/* Email Input Fields */}
+                {renderEmailFields()}                
+              </div>             
               {/* Invite Button */}
               <Button
                 className="cursor-pointer leading-[normal] min-w-[28px] ml-[635px] mt-[20px] text-base text-center tracking-[0.44px]"
