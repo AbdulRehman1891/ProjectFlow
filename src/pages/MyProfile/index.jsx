@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import '../../styles/my.css';
 import { Sidebar } from "react-pro-sidebar";
 
 import { Button, Img, Text } from "components";
@@ -15,11 +16,38 @@ const MyProfilePage = () => {
   const [currentpassword, setCurrentpassword] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmpassword] = useState("");
+  const [popUp, setPopUp] = useState({
+    type: null, // "success" or "error"
+  });
 
   let token = localStorage.getItem("token");
-
   let namee=localStorage.getItem("username")
   let emaill=localStorage.getItem("email")
+  let photoo=localStorage.getItem("photo")
+
+  const handleLogout = async () => {
+  
+  fetch("http://127.0.0.1:3000/api/v1/users/logout", {
+    method: "GET",
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      localStorage.removeItem('email');
+      localStorage.removeItem('photo');
+      setPopUp({ type: "success" });
+      navigate("/signin");
+    })
+    .catch((error) => {
+      setPopUp({ type: "error" });
+      console.error("Error logging in", error);
+  });
+}
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -31,21 +59,22 @@ const MyProfilePage = () => {
 
   const handlePhotoChange = (e) => {
     const selectedPhoto = e.target.files[0];
-    setPhoto(selectedPhoto); // Store the selected photo in state
-
+    setPhoto(selectedPhoto);
+  
     if (selectedPhoto) {
       const reader = new FileReader();
-
+  
       reader.onload = (event) => {
-        const dataURL = event.target.result; // Get the data URL of the selected image
-        // Update the Img component's src attribute with the data URL
-        // This will display the selected image
+        const dataURL = event.target.result;
+        localStorage.setItem('profilePhoto', dataURL); // Store the photo data URL in local storage
         document.querySelector("#profile-img").src = dataURL;
       };
-
+  
       reader.readAsDataURL(selectedPhoto);
     }
   };
+
+  
 
   const handleUpdateFields = async (e) => {
     e.preventDefault();
@@ -115,7 +144,7 @@ const MyProfilePage = () => {
     <>
       <div className="bg-white-A700 flex flex-col font-poppins items-center justify-start mx-auto w-full">
         <div className="flex md:flex-col flex-row md:gap-10 items-start justify-between mx-auto md:px-5 w-full">
-          <div className="h-[1024px] relative w-[22%] md:w-full">
+          <div className="h-[1024px] relative w-[22%] md:w-full" style={{ width: '23%', position: 'relative', backgroundColor: '#EDEFF5' }}>
             <Sidebar className="!sticky !w-[299px] border border-black-900 border-solid flex h-screen md:hidden justify-start m-auto overflow-auto top-[0]"></Sidebar>
             <div className="absolute flex flex-col inset-x-[0] justify-start mx-auto top-[6%] w-[45%]">
               <Text
@@ -126,7 +155,7 @@ const MyProfilePage = () => {
                 ProjectFlow
               </Text>
               <Text
-                className="ml-7 md:ml-[0] mt-[102px] text-base text-indigo-800 tracking-[0.44px]"
+                className="ml-7 md:ml-[0] mt-[102px] cursor-pointer text-base text-indigo-800 tracking-[0.44px]"
                 size="txtPoppinsRegular16"
                 onClick={() => navigate("/dashboard")}
               >
@@ -134,21 +163,21 @@ const MyProfilePage = () => {
               </Text>
               <div className="flex flex-col gap-[46px] items-start justify-start md:ml-[0] ml-[35px] mt-[47px]">
                 <Text
-                  className="md:ml-[0] ml-[3px] text-base text-indigo-800 tracking-[0.44px]"
+                  className="md:ml-[0] ml-[3px] cursor-pointer text-base text-indigo-800 tracking-[0.44px]"
                   size="txtPoppinsRegular16"
                   onClick={() => navigate("/myprojects")}
                 >
                   Projects
                 </Text>
                 <Text
-                  className="text-base text-indigo-800 tracking-[0.44px]"
+                  className="text-base text-indigo-800 cursor-pointer tracking-[0.44px]"
                   size="txtPoppinsRegular16"
                   onClick={() => navigate("/mytasks")}
                 >
                   My Tasks
                 </Text>
                 <Text
-                  className="md:ml-[0] ml-[9px] text-base text-indigo-800 tracking-[0.44px]"
+                  className="md:ml-[0] ml-[9px] text-base cursor-pointer text-indigo-800 tracking-[0.44px]"
                   size="txtPoppinsRegular16"
                   onClick={() => navigate("/apps")}
                 >
@@ -157,22 +186,23 @@ const MyProfilePage = () => {
               </div>
             </div>
           </div>
-          <div className="flex md:flex-1 flex-col md:gap-10 gap-[105px] justify-start md:mt-0 mt-[68px] w-[74%] md:w-full">
+          <div className="flex md:flex-1 flex-col md:gap-10 gap-[105px] justify-start md:mt-0 mt-[68px] w-[70%] md:w-full">
             <Text
-              className="md:ml-[0] ml-[844px] text-base text-indigo-800 tracking-[0.44px]"
+              className="common-pointer md:ml-[0] ml-[844px] text-base text-indigo-800 w-[5.5%] tracking-[0.44px] hover-logout"
               size="txtPoppinsRegular16"
-              onClick={() => navigate("/myprofile")}
+              // onClick={() => navigate("/myprofile")}
+              onClick={handleLogout}
             >
-              My Profile
+              Logout
             </Text>
-            <div className="flex flex-col gap-4 items-start justify-start w-full">
+            <div className="flex flex-col gap-4 items-start justify-start w-full mt-[-120px]">
               <Text
-                className="sm:text-3xl md:text-[32px] text-[34px] text-center text-indigo-800"
+                className="sm:text-3xl md:text-[32px] text-[34px] w-[25%] text-center text-indigo-800 ml-60"
                 size="txtPoppinsBold34"
               >
                 My Profile
               </Text>
-              <div className="bg-gray-50 flex flex-col items-center justify-start p-[22px] sm:px-5 rounded-[30px] w-full">
+              <div className="bg-gray-50 flex flex-col items-center justify-start p-[22px] sm:px-5 rounded-[30px] w-87 shadow-md">
                 <div className="flex flex-col justify-start mb-1.5 w-[90%] md:w-full">
                   <div className="flex md:flex-col flex-row md:gap-5 items-end justify-start w-[99%] md:w-full">
                     <Text
@@ -190,8 +220,8 @@ const MyProfilePage = () => {
                     />
                     <Img
                       id="profile-img"
-                      className="h-28 sm:h-auto mb-2 md:ml-[0] ml-[229px] object-cover w-[15%] md:w-full"
-                      src={photo ? "" : "images/img_image12.png"} // Initially set to an empty string
+                      className="h-30 sm:h-auto mb-2 md:ml-[0] ml-[170px] object-cover w-[15%] md:w-full"
+                      src={photo ? "" : "images/default.jpg"}
                       alt="Profile Image"
                     />
                   </div>
@@ -212,11 +242,12 @@ const MyProfilePage = () => {
                   </div>
                   <label
                     htmlFor="image"
-                    className="sm:flex-1 sm:ml-[0] ml-[750px] text-base text-indigo-800 tracking-[0.44px] w-[16%] sm:w-full"
+                    className="sm:flex-1 sm:ml-[0] ml-[600px] mt-[-20px] text-base text-indigo-800 tracking-[0.44px] w-[24%] sm:w-full cursor-pointer hover:text-red-500"
                   >
                     Change Profile Photo
                   </label>
 
+                
                   <input
                     type="file"
                     id="image" // Make sure the id matches the label htmlFor
@@ -226,7 +257,7 @@ const MyProfilePage = () => {
                   />
                 </div>
                 <Button
-                  className="cursor-pointer leading-[normal] min-w-[83px] md:ml-[0] ml-[759px] mr-[39px] mt-1.5 text-base text-center tracking-[0.44px]"
+                  className="cursor-pointer leading-[normal] min-w-[83px] md:ml-[0] ml-[650px] mr-[39px] mt-1.5 text-base text-center tracking-[0.44px]"
                   shape="round"
                   color="indigo_800"
                   onClick={handleUpdateFields}
@@ -234,11 +265,12 @@ const MyProfilePage = () => {
                   Save
                 </Button>
                 <Text
-                  className="mt-[42px] text-[22px] text-center text-indigo-800 sm:text-lg md:text-xl"
-                  size="txtPoppinsBold22"
-                >
-                  Change Password
-                </Text>
+                className="mt-[42px] text-[22px] text-center text-indigo-800 sm:text-lg md:text-xl ml-[-160px]"
+                size="txtPoppinsBold22"
+              >
+                Change Password
+              </Text>
+
                 <div className="flex md:flex-col flex-row md:gap-5 items-end justify-start md:ml-[0] ml-[7px] mt-8 w-[95%] md:w-full">
                   <Text
                     className="mb-[26px] md:mt-0 mt-3.5 text-base text-indigo-800 tracking-[0.44px] w-[17%] sm:w-full"
@@ -248,7 +280,7 @@ const MyProfilePage = () => {
                   </Text>
                   <input
                     type="password"
-                    className="bg-white-A700 border border-blue_gray-100 border-solid h-12 rounded-[12px] w-[64%]"
+                    className="bg-white-A700 border border-blue_gray-100 border-solid h-12 rounded-[12px] w-[44%]"
                     value={currentpassword}
                     placeholder="xxxxxxxx"
                     onChange={(e) => setCurrentpassword(e.target.value)}
@@ -263,7 +295,7 @@ const MyProfilePage = () => {
                   </Text>
                   <input
                     type="password"
-                    className="bg-white-A700 border border-blue_gray-100 border-solid h-12 rounded-[12px] w-[64%]"
+                    className="bg-white-A700 border border-blue_gray-100 border-solid h-12 rounded-[12px] w-[44%]"
                     value={password}
                     placeholder="xxxxxxxx"
                     onChange={(e) => setPassword(e.target.value)}
@@ -278,7 +310,7 @@ const MyProfilePage = () => {
                   </Text>
                   <input
                     type="password"
-                    className="bg-white-A700 border border-blue_gray-100 border-solid h-12 rounded-[12px] w-[64%]"
+                    className="bg-white-A700 border border-blue_gray-100 border-solid h-12 rounded-[12px] w-[44%]"
                     value={confirmpassword}
                     placeholder="xxxxxxxx"
                     onChange={(e) => setConfirmpassword(e.target.value)}
