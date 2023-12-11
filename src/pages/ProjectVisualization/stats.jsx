@@ -19,6 +19,7 @@ import ProjectProgress from './details';
 
 const TaskTable = ({ tasks, projectId }) => {
 
+
   const navigate = useNavigate();
 
   return (
