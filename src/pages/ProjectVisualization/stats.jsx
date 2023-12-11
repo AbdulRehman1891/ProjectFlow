@@ -191,9 +191,9 @@ const ProjectVisualization = () => {
     const placeholderProjectDetails = {
       progress: 60,
       statisticsData: [
-        { name: 'Week 1', progress: 30, completedTasks: 10, remainingTasks: 20 },
-        { name: 'Week 2', progress: 20, completedTasks: 5, remainingTasks: 15 },
-        { name: 'Week 3', progress: 50, completedTasks: 25, remainingTasks: 25 },
+        { name: 'Week 0', progress: 10, completedTasks: 0, remainingTasks: 20 },
+        { name: 'Week 1', progress: 20, completedTasks: 5, remainingTasks: 15 },
+        { name: 'Week 2', progress: 50, completedTasks: 25, remainingTasks: 25 },
         // ... more data points
       ],
       tasks: [
