@@ -122,7 +122,7 @@ const ProjectStats = ({
             {/* Line chart for project statistics */}
             <ResponsiveContainer width="100%" height={200}>
             <LineChart data={statisticsData} margin={{ top: 5, right: 10, left: 10, bottom: 30 }}>
-              <XAxis dataKey="name" label={{ value: 'Duration', position: 'insideBottom', offset: -10 }} />
+              <XAxis dataKey="name" label={{ position: 'insideBottom', offset: -10 }} />
               <YAxis label={{ value: 'Tasks', angle: -90, position: 'insideLeft' }} />
               <Tooltip />
               <Legend />
