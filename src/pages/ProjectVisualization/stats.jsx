@@ -22,7 +22,7 @@ const TaskTable = ({ tasks }) => {
     style={{
       cursor: "pointer",
       minWidth: "40px",
-      marginRight: "15px", // Adjusted margin to create space between buttons
+      marginRight: "50px", // Adjusted margin to create space between buttons
       fontSize: "30px",
       color: "#323F73",
       width: "40px",
@@ -52,7 +52,7 @@ const TaskTable = ({ tasks }) => {
   <Button
     className="cursor-pointer leading-[normal] min-w-[84px] text-base text-center tracking-[0.44px]"
     shape="round"
-    style={{ backgroundColor: "#860A35", color: "#ffffff" }}
+    style={{ backgroundColor: "#860A35", color: "#ffffff", marginRight: "50px" }}
     onClick={() => navigate('/invite')}
   >
     Invite
