@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, Button } from 'components';
 import { useSpring, animated } from 'react-spring';
 
-const KanbanPopup = ({ task, onClose }) => {
+const KanbanPopup = ({ task, onClose, onAddTask }) => {
   const [editedTask, setEditedTask] = useState({
     name: task.name,
     dueDate: task.dueDate,
@@ -38,6 +38,13 @@ const KanbanPopup = ({ task, onClose }) => {
     }));
   };
 
+  const handleAddTask = () => {
+    // Call the onAddTask function with the updated task data
+    onAddTask(editedTask);
+    // Close the popup
+    onClose();
+  };
+
   return (
     <>
       {/* Background Overlay */}
@@ -48,9 +55,9 @@ const KanbanPopup = ({ task, onClose }) => {
           left: 0,
           width: '100%',
           height: '100%',
-          background: 'rgba(255, 255, 255, 0.8)', // Adjust the opacity as needed
-          backdropFilter: 'blur(5px)', // Add the blur effect
-          zIndex: 1, // Set a lower zIndex than the popup
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(5px)',
+          zIndex: 1,
         }}
       ></div>
 
@@ -59,7 +66,7 @@ const KanbanPopup = ({ task, onClose }) => {
         className="popup-container"
         style={{
           ...popupAnimation,
-          zIndex: 2, // Ensure the popup appears on top of the overlay
+          zIndex: 2,
         }}
       >
         <div
@@ -74,20 +81,20 @@ const KanbanPopup = ({ task, onClose }) => {
             transform: 'translate(-50%, -50%)',
           }}
         >
-          <Text className="text-indigo-800" style={{ fontFamily: 'Poppins', fontWeight: 'bold', fontSize: '24px', marginBottom: '10px' }}>
+          <Text  style={{ fontFamily: 'Poppins',  fontSize: '16px', marginBottom: '10px' }}>
             Name: {' '}
             <input
               type="text"
               value={editedTask.name}
               onChange={(e) => handleInputChange('name', e.target.value)}
-              style={{ fontSize: '24px', fontFamily: 'Poppins', fontWeight: 'bold', border: 'none', outline: 'none', background: 'none' }}
+              style={{ fontSize: '16px', fontFamily: 'Poppins',  border: 'none', outline: 'none', background: 'none' }}
             />
           </Text>
           <div style={{ marginBottom: '10px' }}>
-            <Text style={{ fontSize: '16px' }}>
+            <Text style={{ fontSize: '16px', fontFamily: 'Poppins' }}>
               Due Date:{' '}
               <input
-                type="text"
+                type="date"
                 value={editedTask.dueDate}
                 onChange={(e) => handleInputChange('dueDate', e.target.value)}
                 style={{ fontSize: '16px', fontFamily: 'Poppins', border: 'none', outline: 'none', background: 'none' }}
@@ -95,22 +102,24 @@ const KanbanPopup = ({ task, onClose }) => {
             </Text>
           </div>
 
-
           <div style={{ marginBottom: '10px' }}>
-            <Text style={{ fontSize: '16px' }}>
-              Task Assignee:{' '}
-              <input
-                type="text"
+          <Text style={{ fontSize: '16px', fontFamily: 'Poppins' }}>
+            Task Assignee:{' '}
+            <select
                 value={editedTask.assignee}
                 onChange={(e) => handleInputChange('assignee', e.target.value)}
                 style={{ fontSize: '16px', fontFamily: 'Poppins', border: 'none', outline: 'none', background: 'none' }}
-              />
+            >
+                <option value="team-member-1">Team Member 1</option>
+                <option value="team-member-2">Team Member 2</option>
+                {/* Add more options for other team members */}
+            </select>
             </Text>
+
           </div>
 
-
           <div style={{ marginBottom: '10px' }}>
-            <Text style={{ fontSize: '16px' }}>
+            <Text style={{ fontSize: '16px' , fontFamily: 'Poppins',}}>
               Description:{' '}
               <input
                 type="text"
@@ -122,7 +131,7 @@ const KanbanPopup = ({ task, onClose }) => {
           </div>
 
           <div className="flex flex-row justify-end">
-            <Button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" onClick={onClose}>
+            <Button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full" onClick={handleAddTask}>
               Add
             </Button>
           </div>
