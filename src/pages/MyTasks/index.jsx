@@ -114,16 +114,6 @@ const MyTasksPage = () => {
           My Tasks
         </Text>
 
-        <Button
-          className="common-pointer cursor-pointer leading-[normal] min-w-[10px] mt-2.5 text-base text-center tracking-[0.44px]"
-          style={{ width: '100px', marginLeft: '850px' }}
-          onClick={() => navigate(`/newtask`)}
-          shape="round"
-          color="indigo_800_01"
-        >
-          Create
-        </Button>
-
         <DragDropContext onDragEnd={handleDragEnd}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', margin: '20px 50px' }}>
             {/* Due Tasks */}

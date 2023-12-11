@@ -16,26 +16,49 @@ const TaskTable = ({ tasks }) => {
         <h2 style={{ color: '#323F73', marginBottom: '10px', fontFamily: 'poppins', fontSize: "30px" }}>Task List</h2>
 
         <div style={{ display: 'flex', gap: '10px' }}>
-    {/* Button to Invite */}
-    <Button
-      className="cursor-pointer leading-[normal] min-w-[84px] text-base text-center tracking-[0.44px]"
-      shape="round"
-      style={{ backgroundColor: "#860A35", color: "#ffffff", marginBottom: '20px' }}
-      onClick={() => navigate('/invite')}
-    >
-      Invite
-    </Button>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginRight: '50px', marginBottom: '20px' }}>
+  {/* '+' Button for Creating Tasks */}
+  <Button
+    style={{
+      cursor: "pointer",
+      minWidth: "40px",
+      marginRight: "15px", // Adjusted margin to create space between buttons
+      fontSize: "30px",
+      color: "#323F73",
+      width: "40px",
+      height: "40px",
+      textAlign: "center",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: "50%",
+      border: "1px solid #323F73",
+      transition: "background-color 0.3s, color 0.3s",
+    }}
+    onClick={() => navigate('/newtask')}
+    onMouseOver={(e) => {
+      e.currentTarget.style.backgroundColor = "#323F73";
+      e.currentTarget.style.color = "#F8FAFC";
+    }}
+    onMouseOut={(e) => {
+      e.currentTarget.style.backgroundColor = "";
+      e.currentTarget.style.color = "#323F73";
+    }}
+  >
+    +
+  </Button>
 
-    {/* '+' Button for Creating Tasks */}
-    <Button
-      variant="contained"
-      color="#primary"
-      size="large"
-      onClick={() => navigate(`/newtask`)}
-      style={{ backgroundColor: '#323F73', borderRadius: '8px', width: '50px', height: '50px', color: "#ffffff", marginBottom: '20px' }}
-    >
-      +
-    </Button>
+  {/* Button to Invite */}
+  <Button
+    className="cursor-pointer leading-[normal] min-w-[84px] text-base text-center tracking-[0.44px]"
+    shape="round"
+    style={{ backgroundColor: "#860A35", color: "#ffffff" }}
+    onClick={() => navigate('/invite')}
+  >
+    Invite
+  </Button>
+</div>
+
   </div>
       </div>
       <TableContainer component={Paper} style={{ marginBottom: '10px', background: '#f5f5f5', fontFamily: 'poppins' }}>

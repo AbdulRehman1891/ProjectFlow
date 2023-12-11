@@ -133,9 +133,6 @@ const InviteMembers = () => {
           >
             My Profile
           </Text>
-          {/* '+' Button to Add Email Field */}
-      
-
           <Text
             className="ml-[50px] sm:text-3xl md:text-[3px] text-[34px] text-left text-indigo-800 flex items-center"
             size="txtPoppinsBold34"
