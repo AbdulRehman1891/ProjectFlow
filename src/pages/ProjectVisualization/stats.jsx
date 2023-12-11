@@ -1,13 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useSpring, animated } from 'react-spring';
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useSpring } from 'react-spring';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 import { PieChart } from 'react-minimal-pie-chart';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { useNavigate, Link } from 'react-router-dom';
 import { Text, Img, Button } from 'components';
 import ProjectProgress from './details';
 
-const TaskTable = ({ tasks , projectId}) => {
+
+
+const TaskTable = ({ tasks, projectId }) => {
+
   const navigate = useNavigate();
 
   return (
@@ -16,52 +27,51 @@ const TaskTable = ({ tasks , projectId}) => {
         <h2 style={{ color: '#323F73', marginBottom: '10px', fontFamily: 'poppins', fontSize: "30px" }}>Task List</h2>
 
         <div style={{ display: 'flex', gap: '10px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginRight: '50px', marginBottom: '20px' }}>
-  {/* '+' Button for Creating Tasks */}
-  <Link to={`/newtask?projectId=${projectId}`}>
-  <Button
-    style={{
-      cursor: "pointer",
-      minWidth: "40px",
-      marginRight: "50px", // Adjusted margin to create space between buttons
-      fontSize: "30px",
-      color: "#323F73",
-      width: "40px",
-      height: "40px",
-      textAlign: "center",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: "50%",
-      border: "1px solid #323F73",
-      transition: "background-color 0.3s, color 0.3s",
-    }}
-    onClick={() => navigate('/newtask')}
-    onMouseOver={(e) => {
-      e.currentTarget.style.backgroundColor = "#323F73";
-      e.currentTarget.style.color = "#F8FAFC";
-    }}
-    onMouseOut={(e) => {
-      e.currentTarget.style.backgroundColor = "";
-      e.currentTarget.style.color = "#323F73";
-    }}
-  >
-    +
-  </Button>
-  </Link>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginRight: '50px', marginBottom: '20px' }}>
+            {/* '+' Button for Creating Tasks */}
+            <Link to={`/newtask?projectId=${projectId}`}>
+              <Button
+                style={{
+                  cursor: "pointer",
+                  minWidth: "40px",
+                  marginRight: "50px",
+                  fontSize: "30px",
+                  color: "#323F73",
+                  width: "40px",
+                  height: "40px",
+                  textAlign: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: "50%",
+                  border: "1px solid #323F73",
+                  transition: "background-color 0.3s, color 0.3s",
+                }}
+                onClick={() => navigate('/newtask')}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = "#323F73";
+                  e.currentTarget.style.color = "#F8FAFC";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = "";
+                  e.currentTarget.style.color = "#323F73";
+                }}
+              >
+                +
+              </Button>
+            </Link>
 
-  {/* Button to Invite */}
-  <Button
-    className="cursor-pointer leading-[normal] min-w-[84px] text-base text-center tracking-[0.44px]"
-    shape="round"
-    style={{ backgroundColor: "#860A35", color: "#ffffff", marginRight: "50px" }}
-    onClick={() => navigate('/invite')}
-  >
-    Invite
-  </Button>
-</div>
-
-  </div>
+            {/* Button to Invite */}
+            <Button
+              className="cursor-pointer leading-[normal] min-w-[84px] text-base text-center tracking-[0.44px]"
+              shape="round"
+              style={{ backgroundColor: "#860A35", color: "#ffffff", marginRight: "50px" }}
+              onClick={() => navigate('/invite')}
+            >
+              Invite
+            </Button>
+          </div>
+        </div>
       </div>
       <TableContainer component={Paper} style={{ marginBottom: '10px', background: '#f5f5f5', fontFamily: 'poppins' }}>
         <Table style={{ minWidth: 650, background: '#f5f5f5' }}>
@@ -88,12 +98,11 @@ const TaskTable = ({ tasks , projectId}) => {
 };
 
 const ProjectStats = ({
-
   statisticsData,
   pieChartSize,
   pieChartData,
   tasks,
-  projectId
+  projectId,
 }) => {
   const [hoveredPie, setHoveredPie] = useState(false);
 
@@ -111,13 +120,16 @@ const ProjectStats = ({
           <div style={{ width: '40%' }}>
             {/* Line chart for project statistics */}
             <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={statisticsData} margin={{ top: 5, right: 10, left: 10, bottom: 5 }}>
-                <XAxis dataKey="name" label={{ value: 'Duration', position: 'insideBottom', offset: -10 }} />
-                <YAxis label={{ value: 'Progress', angle: -90, position: 'insideLeft' }} />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="progress" stroke="#860A35" activeDot={{ r: 6 }} />
-              </LineChart>
+            <LineChart data={statisticsData} margin={{ top: 5, right: 10, left: 10, bottom: 30 }}>
+              <XAxis dataKey="name" label={{ value: 'Duration', position: 'insideBottom', offset: -10 }} />
+              <YAxis label={{ value: 'Tasks', angle: -90, position: 'insideLeft' }} />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="progress" stroke="#860A35" activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="completedTasks" stroke="#48BB78" activeDot={{ r: 6 }} />
+              <Line type="monotone" dataKey="remainingTasks" stroke="#F6E05E" activeDot={{ r: 6 }} />
+            </LineChart>
+
             </ResponsiveContainer>
           </div>
 
@@ -178,9 +190,9 @@ const ProjectVisualization = () => {
     const placeholderProjectDetails = {
       progress: 60,
       statisticsData: [
-        { progress: 30 },
-        { progress: 20 },
-        { progress: 50 },
+        { name: 'Week 1', progress: 30, completedTasks: 10, remainingTasks: 20 },
+        { name: 'Week 2', progress: 20, completedTasks: 5, remainingTasks: 15 },
+        { name: 'Week 3', progress: 50, completedTasks: 25, remainingTasks: 25 },
         // ... more data points
       ],
       tasks: [
@@ -188,7 +200,11 @@ const ProjectVisualization = () => {
         { name: 'Task 2', dueDate: '2023-02-01', assignee: 'User 2' },
         // ... more tasks
       ],
-      pieChartData: [{ value: 60, color: '#860A35' }, { value: 30, color: '#e0e0e0' }, { value: 10, color: '#323F73' }],
+      pieChartData: [
+        { value: 60, color: '#860A35' },
+        { value: 30, color: '#e0e0e0' },
+        { value: 10, color: '#323F73' },
+      ],
     };
     setProjectDetails(placeholderProjectDetails);
   }, []);
@@ -206,7 +222,7 @@ const ProjectVisualization = () => {
     <div>
       {/* Render the progress component */}
       <ProjectStats
-      projectId={projectDetails.projectId}
+        projectId={projectDetails.projectId}
         handleCategoryChange={() => {}} // Placeholder functions, replace with your logic
         handleNavigate={() => {}}
         handleDeletionProject={() => {}}
