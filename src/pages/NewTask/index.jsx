@@ -1,24 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone, faTimes } from "@fortawesome/free-solid-svg-icons";
 import Navigation from "pages/Sidebar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Text, Button } from "components";
 import { MyDatePicker } from "components";
 import { useSpring, animated } from 'react-spring';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
-
 const NewTaskPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [popUp, setPopUp] = useState({ type: "", message: "" });
   const [isMicrophoneClicked, setMicrophoneClicked] = useState(false);
   const [isRecording, setRecording] = useState(false);
   const { transcript, resetTranscript } = useSpeechRecognition();
-  const [recordedText, setRecordedText] = useState('');
+  const [formData, setFormData] = useState({
+    projectId: "",
+    startDate: "",
+    projectName: "",
+    creatorName: "",
+    assignee: "",
+    dueDate: "",
+    lastUpdationDate: "",
+    priority: "",
+    description: "",
+  });
+
+  const projects = [
+    { id: 1, name: 'Project 1' },
+    { id: 2, name: 'Project 2' },
+    // Add more projects as needed
+  ];
+
+  useEffect(() => {
+    // Check if projectId is present in the query parameters
+    const queryParams = new URLSearchParams(location.search);
+    const projectIdFromQuery = queryParams.get("projectId");
+
+    if (projectIdFromQuery) {
+      // If projectId is present, set it to the form data
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        projectId: projectIdFromQuery,
+      }));
+    }
+  }, [location.search]);
 
   const handleSpeakNowClick = () => {
-    // Your logic to start/stop recording
     if (!isRecording) {
       SpeechRecognition.startListening();
       setRecording(true);
@@ -37,27 +67,19 @@ const NewTaskPage = () => {
     }
   };
 
-
-  const handleStartDateChange = (date) => {
-    // Your logic for handling start date change
-  };
-
-  const handleDueDateChange = (date) => {
-    // Your logic for handling due date change
+  const handleDateChange = (date, field) => {
+    setFormData((prevData) => ({ ...prevData, [field]: date }));
   };
 
   const handleInputChange = (e) => {
-    // Your logic for handling input change
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const formData = {
-    startDate: "", // Set the initial values
-    projectName: "",
-    dueDate: "",
-    description: "",
-    lastUpdationDate: "", // Add lastUpdationDate field
-    priority: "", // Add priority field
-    status: "" // Add status field
+  const handleCreateTask = () => {
+    // Your logic for creating the task
+    // You can set the popUp state based on success or failure
+    setPopUp({ type: "success", message: "Task Created Successfully!" });
   };
 
   const popUpAnimation = useSpring({
@@ -72,12 +94,6 @@ const NewTaskPage = () => {
   const microphoneAnimation = useSpring({
     transform: isMicrophoneClicked ? "translate(-50%, -50%) scale(2)" : "translate(-50%, -50%) scale(1)",
   });
-
-  const handleCreateProject = () => {
-    // Your logic for creating the project
-    // You can set the popUp state based on success or failure
-    setPopUp({ type: "success", message: "Project Created Successfully!" });
-  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row', height: '100vh' }}>
@@ -116,22 +132,45 @@ const NewTaskPage = () => {
               />
             </animated.div>
           </div>
-
         </div>
 
         <div className="ml-[45px] bg-gray-50 flex flex-col items-center justify-end mt-8 p-[39px] sm:px-5 rounded-[30px] w-full">
           <div className="flex flex-col items-start justify-start mt-[19px] w-[95%] md:w-full">
+
+            {/* Other input fields go here */}
+            {/* Example: Task Creation Date */}
             <div className="flex md:flex-col flex-row gap-[22px] items-start justify-between w-[97%] md:w-full mt-[34px]">
               <Text className="text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                 Task Creation Date
               </Text>
-              {/* Replace MyDatePicker with your actual date picker component */}
               <MyDatePicker
                 selectedDate={formData.startDate}
-                handleDateChange={handleStartDateChange}
+                handleDateChange={(date) => handleDateChange(date, 'startDate')}
               />
             </div>
 
+             {/* Dropdown for selecting projects */}
+          <div className="flex md:flex-col flex-row gap-[22px] items-start justify-between w-[97%] md:w-full mt-[34px]">
+            <Text className="text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
+              Project
+            </Text>
+            <select
+              name="projectId"
+              value={formData.projectId}  // Assuming your formData has a projectId field
+              onChange={handleInputChange}
+              className="text-base w-[76%] bg-gray-50 border-none border-b-2 border-indigo-800 focus:outline-none"
+            >
+              <option value="" disabled>Select a project</option>
+              {projects.map((project) => (
+                <option key={project.id} value={project.id}>
+                  {project.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+
+            {/* Task Name */}
             <div className="flex md:flex-col flex-row md:gap-10 items-start justify-between mt-[34px] w-[97%] md:w-full">
               <Text className="md:mt-0 mt-0.5 text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                 Task Name
@@ -147,6 +186,7 @@ const NewTaskPage = () => {
               </div>
             </div>
 
+            {/* Task Creator Name */}
             <div className="flex md:flex-col flex-row md:gap-10 items-start justify-between mt-[34px] w-[97%] md:w-full">
               <Text className="md:mt-0 mt-0.5 text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                 Task Creator Name
@@ -154,14 +194,15 @@ const NewTaskPage = () => {
               <div className="border-b bg-gray-50 border-indigo-800 text-base w-[76%]">
                 <input
                   type="text"
-                  name="projectName"
-                  value={formData.projectName}
+                  name="creatorName"
+                  value={formData.creatorName}
                   onChange={handleInputChange}
                   className="text-base w-full bg-gray-50 border-none border-b-2 border-indigo-800 focus:outline-none"
                 />
               </div>
             </div>
 
+            {/* Task Assignee */}
             <div className="flex md:flex-col flex-row md:gap-10 items-start justify-between mt-[34px] w-[97%] md:w-full">
               <Text className="md:mt-0 mt-0.5 text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                 Task Assignee
@@ -169,52 +210,54 @@ const NewTaskPage = () => {
               <div className="border-b bg-gray-50 border-indigo-800 text-base w-[76%]">
                 <input
                   type="text"
-                  name="projectName"
-                  value={formData.projectName}
+                  name="assignee"
+                  value={formData.assignee}
                   onChange={handleInputChange}
                   className="text-base w-full bg-gray-50 border-none border-b-2 border-indigo-800 focus:outline-none"
                 />
               </div>
             </div>
 
-
+            {/* Due Date */}
             <div className="flex md:flex-col flex-row gap-[22px] items-start justify-between w-[97%] md:w-full mt-[34px]">
               <Text className="text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                 Due Date
               </Text>
               <MyDatePicker
                 selectedDate={formData.dueDate}
-                handleDateChange={handleDueDateChange}
+                handleDateChange={(date) => handleDateChange(date, 'dueDate')}
               />
             </div>
 
+            {/* Last Updation Date */}
             <div className="flex md:flex-col flex-row gap-[22px] items-start justify-between w-[97%] md:w-full mt-[34px]">
               <Text className="text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                 Last Updation Date
               </Text>
               <MyDatePicker
                 selectedDate={formData.lastUpdationDate}
-                handleDateChange={handleDueDateChange}  
+                handleDateChange={(date) => handleDateChange(date, 'lastUpdationDate')}
               />
             </div>
 
+            {/* Priority */}
             <div className="flex md:flex-col flex-row gap-[22px] items-start justify-between w-[97%] md:w-full mt-[34px]">
               <Text className="text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                 Priority
               </Text>
-              {/* Add your priority dropdown component here */}
               <select
                 name="priority"
                 value={formData.priority}
                 onChange={handleInputChange}
                 className="text-base w-[76%] bg-gray-50 border-none border-b-2 border-indigo-800 focus:outline-none"
               >
-                {/* Add options for priority */}
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
               </select>
             </div>
+
+            {/* Description */}
             <div className="flex md:flex-col flex-row gap-[22px] items-start justify-between w-[97%] md:w-full mt-[34px]">
               <Text className="text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                 Description
@@ -233,7 +276,7 @@ const NewTaskPage = () => {
               className="cursor-pointer leading-[normal] min-w-[84px] md:ml-[0] ml-[745px] mt-[63px] text-base text-center tracking-[0.44px]"
               shape="round"
               color="indigo_800"
-              onClick={handleCreateProject}
+              onClick={handleCreateTask}
             >
               Create
             </Button>
@@ -296,7 +339,7 @@ const NewTaskPage = () => {
               bottom: '-50px',
               left: "-4px", // Adjust this value to fine-tune the position
               color: 'white',
-              width: '50'
+              width: '50',
             }}
           >
             {isRecording ? 'Stop Recording' : 'Speak Now'}

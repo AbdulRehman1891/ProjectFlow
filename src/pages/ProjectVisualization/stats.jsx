@@ -3,11 +3,11 @@ import { useSpring, animated } from 'react-spring';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { PieChart } from 'react-minimal-pie-chart';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Text, Img, Button } from 'components';
 import ProjectProgress from './details';
 
-const TaskTable = ({ tasks }) => {
+const TaskTable = ({ tasks , projectId}) => {
   const navigate = useNavigate();
 
   return (
@@ -18,6 +18,7 @@ const TaskTable = ({ tasks }) => {
         <div style={{ display: 'flex', gap: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', marginRight: '50px', marginBottom: '20px' }}>
   {/* '+' Button for Creating Tasks */}
+  <Link to={`/newtask?projectId=${projectId}`}>
   <Button
     style={{
       cursor: "pointer",
@@ -47,6 +48,7 @@ const TaskTable = ({ tasks }) => {
   >
     +
   </Button>
+  </Link>
 
   {/* Button to Invite */}
   <Button
@@ -91,6 +93,7 @@ const ProjectStats = ({
   pieChartSize,
   pieChartData,
   tasks,
+  projectId
 }) => {
   const [hoveredPie, setHoveredPie] = useState(false);
 
@@ -160,7 +163,7 @@ const ProjectStats = ({
           </div>
         </div>
         {/* Display Task List */}
-        <TaskTable tasks={tasks} />
+        <TaskTable tasks={tasks} projectId={projectId} />
       </div>
     </div>
   );
@@ -203,6 +206,7 @@ const ProjectVisualization = () => {
     <div>
       {/* Render the progress component */}
       <ProjectStats
+      projectId={projectDetails.projectId}
         handleCategoryChange={() => {}} // Placeholder functions, replace with your logic
         handleNavigate={() => {}}
         handleDeletionProject={() => {}}
