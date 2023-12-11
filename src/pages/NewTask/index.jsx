@@ -207,15 +207,20 @@ const NewTaskPage = () => {
               <Text className="md:mt-0 mt-0.5 text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                 Task Assignee
               </Text>
-              <div className="border-b bg-gray-50 border-indigo-800 text-base w-[76%]">
-                <input
-                  type="text"
-                  name="assignee"
-                  value={formData.assignee}
-                  onChange={handleInputChange}
-                  className="text-base w-full bg-gray-50 border-none border-b-2 border-indigo-800 focus:outline-none"
-                />
-              </div>
+              
+              <select
+            name="assignee"
+            value={formData.assignee}
+            onChange={handleInputChange}
+            className="text-base w-[76%] bg-gray-50 border-none border-b-2 border-indigo-800 focus:outline-none"
+          >
+            <option value="" disabled>Select a task assignee</option>
+            {/* Add your task assignees dynamically here */}
+            <option value="Assignee1">Assignee 1</option>
+            <option value="Assignee2">Assignee 2</option>
+            {/* Add more assignees as needed */}
+          </select>
+              
             </div>
 
             {/* Due Date */}
@@ -357,3 +362,4 @@ const NewTaskPage = () => {
 };
 
 export default NewTaskPage;
+

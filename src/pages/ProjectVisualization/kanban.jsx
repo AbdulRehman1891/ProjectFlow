@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
-import { Button } from 'components'; // Assuming Button is imported from 'components'
+import { Button, MyDatePicker } from 'components'; // Assuming MyDatePicker is imported from 'components'
 import { useNavigate } from 'react-router-dom';
 import ProjectProgress from './details';
+import KanbanPopup from './kanbanpopup';
 
-const KanbanComponent = ({
-}) => {
+const KanbanComponent = ({}) => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState({
     todo: [
@@ -22,6 +22,9 @@ const KanbanComponent = ({
 
   const [newCategory, setNewCategory] = useState('');
   const [showAddCategoryPopup, setShowAddCategoryPopup] = useState(false);
+
+  const [showKanbanPopup, setShowKanbanPopup] = useState(false);
+  const [categoryToAddTask, setCategoryToAddTask] = useState('');
 
   const onDragEnd = (result) => {
     const { source, destination, draggableId } = result;
@@ -55,6 +58,8 @@ const KanbanComponent = ({
     setTasks(newTasks);
   };
 
+
+
   const handleAddCategory = () => {
     if (newCategory.trim() !== '') {
       setTasks((prevTasks) => ({
@@ -73,21 +78,45 @@ const KanbanComponent = ({
   };
 
   const handleAddTaskToCategory = (category) => {
-    const newTaskContent = prompt('Enter task content:');
-    if (newTaskContent) {
-      setTasks((prevTasks) => ({
+    setCategoryToAddTask(category);
+    setShowKanbanPopup(true);
+  };
+
+  const closeKanbanPopup = () => {
+    setShowKanbanPopup(false);
+    setCategoryToAddTask('');
+  };
+
+  const handleAddTask = (newTaskData, category) => {
+    setTasks((prevTasks) => {
+      const categoryTasks = [...prevTasks[category]];
+      const newTask = {
+        id: String(Date.now()),
+        content: newTaskData.name,
+        projectId: newTaskData.projectId,
+        startDate: newTaskData.startDate,
+        creatorName: newTaskData.creatorName,
+        assignee: newTaskData.assignee,
+        dueDate: newTaskData.dueDate,
+        lastUpdationDate: newTaskData.lastUpdationDate,
+        priority: newTaskData.priority,
+        description: newTaskData.description,
+      };
+
+      categoryTasks.push(newTask);
+
+      return {
         ...prevTasks,
-        [category]: [
-          ...prevTasks[category],
-          { id: String(Date.now()), content: newTaskContent },
-        ],
-      }));
-    }
+        [category]: categoryTasks,
+      };
+    });
+
+    setShowKanbanPopup(false);
   };
 
   return (
     <div>
-      <ProjectProgress/>
+      <ProjectProgress />
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '250px', marginTop: '-300px' }}>
         {/* KanbanComponent content */}
@@ -165,6 +194,19 @@ const KanbanComponent = ({
               Cancel
             </Button>
           </div>
+        )}
+
+        {showKanbanPopup && (
+          <KanbanPopup
+            task={{
+              name: '',
+              dueDate: '',
+              assignee: '',
+              description: '',
+            }}
+            onClose={closeKanbanPopup}
+            onAddTask={(newTaskData) => handleAddTask(newTaskData, categoryToAddTask)}
+          />
         )}
 
         <div>
