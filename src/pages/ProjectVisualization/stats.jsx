@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSpring } from 'react-spring';
+import { useSpring,animated } from 'react-spring';
 import {
   LineChart,
   Line,
@@ -14,13 +14,121 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { useNavigate, Link } from 'react-router-dom';
 import { Text, Img, Button } from 'components';
 import ProjectProgress from './details';
+import './TaskDetailsPopup.css';
 
+
+const TaskDetailsPopup = ({ task, onClose, onDelete }) => {
+  const [editedTask, setEditedTask] = useState({ ...task });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedTask((prevTask) => ({
+      ...prevTask,
+      [name]: value,
+    }));
+  };
+
+  const handleSaveChanges = () => {
+    // Add logic to save the edited task details
+    console.log('Saving changes:', editedTask);
+    // You may want to make an API call or update state with the edited task
+  };
+
+  const popupAnimation = useSpring({
+    from: { opacity: 0, transform: 'translate(-50%, -50%) scale(0.5)' },
+    to: { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+  });
+
+  return (
+    <>
+      {/* Background Overlay */}
+      <div
+        className="popup-overlay"
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: 'rgba(255, 255, 255, 0.8)',
+          backdropFilter: 'blur(5px)',
+          zIndex: 1,
+        }}
+        onClick={onClose} // Close the popup if clicked outside the form
+      ></div>
+
+      {/* Popup */}
+      <animated.div
+        className="task-details-popup"
+        style={{
+          ...popupAnimation,
+          zIndex: 2,
+        }}
+      >
+        <h2>Edit Task: {editedTask.name}</h2>
+        
+        <div className="field">
+          <label>Task Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={editedTask.name}
+            onChange={handleInputChange}
+          />
+        </div>
+        
+        <div className="field">
+          <label>Due Date:</label>
+          <input
+            type="date"
+            name="dueDate"
+            value={editedTask.dueDate}
+            onChange={handleInputChange}
+          />
+        </div>
+        
+        <div className="field">
+          <label>Assignee:</label>
+          <select
+            name="assignee"
+            value={editedTask.assignee}
+            onChange={handleInputChange}
+          >
+            <option value="team-member-1">Team Member 1</option>
+            <option value="team-member-2">Team Member 2</option>
+            {/* Add more options for other team members */}
+          </select>
+        </div>
+
+        <Button style={{backgroundColor: " #48BB78", color: "#ffffff"}}onClick={handleSaveChanges}>Save Changes</Button>
+        <Button style={{backgroundColor: " #BE3144", color: "#ffffff"}} onClick={onDelete}>Delete Task</Button>
+        <Button style={{backgroundColor: " #323F73", color: "#ffffff"}} onClick={onClose}>Close</Button>
+      </animated.div>
+    </>
+  );
+};
 
 
 const TaskTable = ({ tasks, projectId }) => {
 
 
   const navigate = useNavigate();
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  const handleTaskClick = (task) => {
+    setSelectedTask(task);
+  };
+
+  const handlePopupClose = () => {
+    setSelectedTask(null);
+  };
+
+  const handleDeleteTask = () => {
+    // Implement task deletion logic here
+    // You may want to use an API call or update state to remove the task
+    console.log('Deleting task:', selectedTask);
+    handlePopupClose(); // Close the popup after deletion
+  };
 
   return (
     <div>
@@ -84,19 +192,33 @@ const TaskTable = ({ tasks, projectId }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tasks.map((task, index) => (
-              <TableRow key={index}>
+          {tasks.map((task, index) => (
+              <TableRow key={index} onClick={() => handleTaskClick(task)} style={{ cursor: 'pointer' }}>
                 <TableCell>{task.name}</TableCell>
                 <TableCell>{task.dueDate}</TableCell>
                 <TableCell>{task.assignee}</TableCell>
               </TableRow>
             ))}
+            
           </TableBody>
         </Table>
       </TableContainer>
+
+      {/* TaskDetailsPopup */}
+      {selectedTask && (
+        <TaskDetailsPopup
+          task={selectedTask}
+          onClose={handlePopupClose}
+          onDelete={handleDeleteTask}
+        />
+      )}
+
     </div>
   );
 };
+
+
+
 
 const ProjectStats = ({
   statisticsData,
