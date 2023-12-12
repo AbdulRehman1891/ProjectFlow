@@ -69,10 +69,11 @@ const NewTaskPage = () => {
     });
   };
 
-   const handleCreateTasks = () => {
+const handleCreateTasks = () => {
     // Implement logic to create tasks based on selectedTasks
     // For example, you can console.log the selected tasks for now
     console.log('Selected Tasks:', selectedTasks);
+    navigate('/details/')
 
     // Reset selectedTasks and close the task list pop-up
     setSelectedTasks([]);
@@ -142,7 +143,7 @@ const NewTaskPage = () => {
 
   const microphoneAnimation = useSpring({
     transform: isMicrophoneClicked ? "translate(-50%, -50%) scale(2)" : "translate(-50%, -50%) scale(1)",
-    left: isMicrophoneClicked ? "50%" : "88%", // Move left when microphone is clicked
+    left: isMicrophoneClicked ? "88%" : "88%", // Move left when microphone is clicked
   });
 
   return (
@@ -185,9 +186,6 @@ const NewTaskPage = () => {
 
         <div className="ml-[45px] bg-gray-50 flex flex-col items-center justify-end mt-8 p-[39px] sm:px-5 rounded-[30px] w-full">
           <div className="flex flex-col items-start justify-start mt-[19px] w-[95%] md:w-full">
-
-            {/* Other input fields go here */}
-            {/* Example: Task Creation Date */}
             <div className="flex md:flex-col flex-row gap-[22px] items-start justify-between w-[97%] md:w-full mt-[34px]">
               <Text className="text-base text-indigo-800 tracking-[0.44px]" size="txtPoppinsRegular16">
                 Task Creation Date
@@ -371,7 +369,7 @@ const NewTaskPage = () => {
           }}
         >
           {/* Microphone modal content */}
-          <animated.div style={{ ...microphoneAnimation, textAlign: 'center' }}>
+          <animated.div style={{ ...microphoneAnimation}}>
             <FontAwesomeIcon
               icon={faMicrophone}
               className="h-[54px] text-indigo-800 mb-4"
@@ -391,15 +389,19 @@ const NewTaskPage = () => {
               style={{
                 position: 'absolute',
                 bottom: '-50px',
-                left: "-4px", // Adjust this value to fine-tune the position
+                left: "-7px", // Adjust this value to move it to the left
                 color: 'white',
-                width: '50',
+                width: '70px', // Adjust the width as needed
+                fontFamily: 'Poppins',
+                fontSize: "14px"
               }}
             >
-              {isRecording ? 'Stop Recording' : 'Speak Now'}
+              {isRecording ? 'Stop' : 'Record'}
             </button>
+
+            
             {isRecordingStopped && (
-              <div style={{ position: 'absolute', bottom: '-50px', left: "100px", color: 'white' }}>
+              <div style={{ position: 'absolute', bottom: '-20px', left: "100px", color: 'white' }}>
                 {isLoading ? (
                   <>
                     
@@ -410,15 +412,20 @@ const NewTaskPage = () => {
                   </>
                 ) : (
                   <>
+                    
+                    <div className={`text-white mt-2 ${transcript ? '' : 'hidden'}`}
+                    style={{fontFamily: 'Poppins',
+                    fontSize: "12px"}}>
+                      Recorded Text: {transcript}
+                    </div>
                     <button
                       onClick={handleProcessRecording}
                       className="text-white text-sm cursor-pointer bg-indigo-800 p-2 rounded-md mt-2"
+                      style={{fontFamily: 'Poppins',
+                      fontSize: "14px"}}
                     >
                       Confirm
                     </button>
-                    <div className={`text-white mt-2 ${transcript ? '' : 'hidden'}`}>
-                      Recorded Text: {transcript}
-                    </div>
                   </>
                 )}
               </div>
@@ -426,9 +433,13 @@ const NewTaskPage = () => {
           </animated.div>
         </animated.div>
 
+
         {showTaskList && (
           <div
             style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
               position: 'fixed',
               top: '50%',
               left: '50%',
@@ -440,14 +451,13 @@ const NewTaskPage = () => {
               width: '60%', // Adjust the width as needed
               maxHeight: '80%', // Adjust the max height as needed
               overflowY: 'auto',
+              fontFamily: "Poppins",
+              color: "#323F73"
             }}
           >
-            {/* Task list content */}
-            {/* Add your task list rendering logic here */}
-            <h2>Task List</h2>
-            {/* Example: Render task items */}
+            <h2 style={{ fontWeight: "bold" , marginBottom: '20px'}}>Task List</h2>
             {tasks.map((task) => (
-              <div key={task.id} style={{ marginBottom: '20px' }}>
+              <div key={task.id} style={{ marginBottom: '20px'}}>
                 <label>
                   <input
                     type="checkbox"
@@ -459,8 +469,10 @@ const NewTaskPage = () => {
                 <p>{task.description}</p>
               </div>
             ))}
-            <button onClick={() => setShowTaskList(false)}>Close</button>
-            <button onClick={handleCreateTasks}>Create</button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+              <button onClick={() => setShowTaskList(false)}>Close</button>
+              <button onClick={handleCreateTasks}>Create</button>
+            </div>
           </div>
         )}
     </div>
