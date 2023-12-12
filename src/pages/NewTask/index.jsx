@@ -405,10 +405,11 @@ const handleCreateTasks = () => {
                 {isLoading ? (
                   <>
                     
-                    {/* Add your loading animation here */}
-                    <div className="spinner-border text-light" role="status">
-                      <span className="visually-hidden">Loading...</span>
+                   {/* Add your loading animation here */}
+                    <div className="text-light" role="status">
+                      <img src={ "images/loading.gif"} alt="Loading..." />
                     </div>
+
                   </>
                 ) : (
                   <>
