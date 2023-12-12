@@ -16,6 +16,14 @@ const NewTaskPage = () => {
   const [isMicrophoneClicked, setMicrophoneClicked] = useState(false);
   const [isRecording, setRecording] = useState(false);
   const { transcript, resetTranscript } = useSpeechRecognition();
+ const [tasks, setTasks] = useState([
+    { id: 1, name: 'Task 1', description: 'Description for Task 1' },
+    { id: 2, name: 'Task 2', description: 'Description for Task 2' },
+    { id: 3, name: 'Task 3', description: 'Description for Task 3' },
+    // Add more tasks as needed
+  ]);
+   const [selectedTasks, setSelectedTasks] = useState([]);
+  const [convertedText, setConvertedText] = useState(""); // State to store converted text
   const [formData, setFormData] = useState({
     projectId: "",
     startDate: "",
@@ -48,17 +56,42 @@ const NewTaskPage = () => {
     }
   }, [location.search]);
 
+  const [isRecordingStopped, setRecordingStopped] = useState(false);
+  const [showTaskList, setShowTaskList] = useState(false);
+
+   const handleTaskCheckboxChange = (taskId) => {
+    setSelectedTasks((prevSelectedTasks) => {
+      if (prevSelectedTasks.includes(taskId)) {
+        return prevSelectedTasks.filter((id) => id !== taskId);
+      } else {
+        return [...prevSelectedTasks, taskId];
+      }
+    });
+  };
+
+   const handleCreateTasks = () => {
+    // Implement logic to create tasks based on selectedTasks
+    // For example, you can console.log the selected tasks for now
+    console.log('Selected Tasks:', selectedTasks);
+
+    // Reset selectedTasks and close the task list pop-up
+    setSelectedTasks([]);
+    setShowTaskList(false);
+  };
+
   const handleSpeakNowClick = () => {
     if (!isRecording) {
       SpeechRecognition.startListening();
       setRecording(true);
+      setRecordingStopped(false); // Reset the recording stopped state
     } else {
       SpeechRecognition.stopListening();
       setRecording(false);
+      setRecordingStopped(true); // Set recording stopped state
     }
   };
 
-  const handleMicrophoneClick = () => {
+   const handleMicrophoneClick = () => {
     setMicrophoneClicked(!isMicrophoneClicked);
     if (isMicrophoneClicked) {
       SpeechRecognition.stopListening();
@@ -66,7 +99,6 @@ const NewTaskPage = () => {
       setRecording(false);
     }
   };
-
   const handleDateChange = (date, field) => {
     setFormData((prevData) => ({ ...prevData, [field]: date }));
   };
@@ -76,23 +108,41 @@ const NewTaskPage = () => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  const [isLoading, setLoading] = useState(false);
+
   const handleCreateTask = () => {
     // Your logic for creating the task
     // You can set the popUp state based on success or failure
     setPopUp({ type: "success", message: "Task Created Successfully!" });
   };
 
+ const handleProcessRecording = () => {
+    setLoading(true); // Set loading state to true when processing starts
+    setConvertedText(transcript);
+
+    // Simulate processing delay (replace this with your actual processing logic)
+    setTimeout(() => {
+      setLoading(false); // Set loading state to false when processing is complete
+      setShowTaskList(true); // Show the task list pop-up
+    }, 2000); // Adjust the delay time as needed
+  };
+
+  const closeTaskList = () => {
+    setShowTaskList(false); // Close the task list pop-up
+  };
+
   const popUpAnimation = useSpring({
     opacity: popUp.type ? 1 : 0,
   });
 
-  const overlayAnimation = useSpring({
+   const overlayAnimation = useSpring({
     opacity: isMicrophoneClicked ? 1 : 0,
     zIndex: isMicrophoneClicked ? 2 : -1,
   });
 
   const microphoneAnimation = useSpring({
     transform: isMicrophoneClicked ? "translate(-50%, -50%) scale(2)" : "translate(-50%, -50%) scale(1)",
+    left: isMicrophoneClicked ? "50%" : "88%", // Move left when microphone is clicked
   });
 
   return (
@@ -120,7 +170,6 @@ const NewTaskPage = () => {
               style={{
                 ...microphoneAnimation,
                 position: 'absolute',
-                left: '88%',
                 top: '30%',
                 transform: 'translate(-50%, -50%)',
               }}
@@ -306,57 +355,114 @@ const NewTaskPage = () => {
         </p>
       </animated.div>
 
-      <animated.div
-        style={{
-          ...overlayAnimation,
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backdropFilter: 'blur(5px)',
-        }}
-      >
-        {/* Microphone modal content */}
-        <animated.div style={{ ...microphoneAnimation, textAlign: 'center' }}>
-          <FontAwesomeIcon
-            icon={faMicrophone}
-            className="h-[54px] text-indigo-800 mb-4"
-          />
-          <button
-            style={{
-              position: 'absolute',
-              bottom: '100px',
-              left: '200px',
-            }}
-            onClick={handleMicrophoneClick} className="text-white text-lg cursor-pointer">
-            <FontAwesomeIcon icon={faTimes} />
-          </button>
-          <button
-            onClick={handleSpeakNowClick}
-            className="text-white text-sm cursor-pointer bg-indigo-800 p-2 rounded-md mt-2"
-            style={{
-              position: 'absolute',
-              bottom: '-50px',
-              left: "-4px", // Adjust this value to fine-tune the position
-              color: 'white',
-              width: '50',
-            }}
-          >
-            {isRecording ? 'Stop Recording' : 'Speak Now'}
-          </button>
-          <div
-            className={`text-white mt-2 ${transcript ? '' : 'hidden'}`}
-            style={{ position: 'absolute', bottom: '-50px', left: "100px", color: 'white' }}
-          >
-            Recorded Text: {transcript}
-          </div>
+       <animated.div
+          style={{
+            ...overlayAnimation,
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            background: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backdropFilter: 'blur(5px)',
+          }}
+        >
+          {/* Microphone modal content */}
+          <animated.div style={{ ...microphoneAnimation, textAlign: 'center' }}>
+            <FontAwesomeIcon
+              icon={faMicrophone}
+              className="h-[54px] text-indigo-800 mb-4"
+            />
+            <button
+              style={{
+                position: 'absolute',
+                bottom: '100px',
+                left: '200px',
+              }}
+              onClick={handleMicrophoneClick} className="text-white text-lg cursor-pointer">
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            <button
+              onClick={handleSpeakNowClick}
+              className="text-white text-sm cursor-pointer bg-indigo-800 p-2 rounded-md mt-2"
+              style={{
+                position: 'absolute',
+                bottom: '-50px',
+                left: "-4px", // Adjust this value to fine-tune the position
+                color: 'white',
+                width: '50',
+              }}
+            >
+              {isRecording ? 'Stop Recording' : 'Speak Now'}
+            </button>
+            {isRecordingStopped && (
+              <div style={{ position: 'absolute', bottom: '-50px', left: "100px", color: 'white' }}>
+                {isLoading ? (
+                  <>
+                    
+                    {/* Add your loading animation here */}
+                    <div className="spinner-border text-light" role="status">
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleProcessRecording}
+                      className="text-white text-sm cursor-pointer bg-indigo-800 p-2 rounded-md mt-2"
+                    >
+                      Confirm
+                    </button>
+                    <div className={`text-white mt-2 ${transcript ? '' : 'hidden'}`}>
+                      Recorded Text: {transcript}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+          </animated.div>
         </animated.div>
-      </animated.div>
+
+        {showTaskList && (
+          <div
+            style={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              background: 'white',
+              padding: '20px',
+              borderRadius: '10px',
+              zIndex: '3',
+              width: '60%', // Adjust the width as needed
+              maxHeight: '80%', // Adjust the max height as needed
+              overflowY: 'auto',
+            }}
+          >
+            {/* Task list content */}
+            {/* Add your task list rendering logic here */}
+            <h2>Task List</h2>
+            {/* Example: Render task items */}
+            {tasks.map((task) => (
+              <div key={task.id} style={{ marginBottom: '20px' }}>
+                <label>
+                  <input
+                    type="checkbox"
+                    onChange={() => handleTaskCheckboxChange(task.id)}
+                    checked={selectedTasks.includes(task.id)}
+                  />
+                  <span style={{ marginLeft: '8px' }}>{task.name}</span>
+                </label>
+                <p>{task.description}</p>
+              </div>
+            ))}
+            <button onClick={() => setShowTaskList(false)}>Close</button>
+            <button onClick={handleCreateTasks}>Create</button>
+          </div>
+        )}
     </div>
   );
 };
